@@ -8,6 +8,7 @@ use App\Http\Requests\ListRequest;
 use App\Http\Requests\UpdateRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
+use Carbon\Carbon;
 
 class TaskController extends Controller
 {
@@ -46,7 +47,9 @@ class TaskController extends Controller
         $request->whenFilled('search.status', function($status) use ($query) {
             $query->where('status', $status);
         });
+
         $request->whenFilled('search.complete_till', function($completeTill) use ($query) {
+            $completeTill = Carbon::createFromTimestamp($completeTill)->toDateTimeString();
             $query->where('complete_till', $completeTill);
         });
 

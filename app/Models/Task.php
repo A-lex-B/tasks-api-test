@@ -12,7 +12,8 @@ class Task extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'status' => 'boolean'
+        'status' => 'boolean',
+        'complete_till' => 'datetime'
     ];
 
     protected static function booted()
