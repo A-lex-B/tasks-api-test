@@ -9,5 +9,16 @@ class Task extends Model
 {
     use HasFactory;
 
-    protected $guarded =[];
+    protected $guarded = [];
+
+    protected $casts = [
+        'status' => 'boolean'
+    ];
+
+    protected static function booted()
+    {
+        static::creating(function(Task $task) {
+            $task->status = false;
+        });
+    }
 }

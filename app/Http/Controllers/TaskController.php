@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateRequest;
+use App\Http\Requests\DeleteRequest;
+use App\Http\Requests\ListRequest;
 use App\Http\Requests\UpdateRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
-use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
@@ -30,5 +31,25 @@ class TaskController extends Controller
         $task->update($request->safe()->except('id'));
 
         return new TaskResource($task);
+    }
+
+    public function delete(DeleteRequest $request)
+    {
+        Task::findOrFail($request->id)->delete();
+        return TaskResource::collection(Task::all());
+    }
+
+    public function list(ListRequest $request)
+    {
+        $query = Task::query();
+
+        $request->whenFilled('search.status', function($status) use ($query) {
+            $query->where('status', $status);
+        });
+        $request->whenFilled('search.complete_till', function($completeTill) use ($query) {
+            $query->where('complete_till', $completeTill);
+        });
+
+        return TaskResource::collection($query->get());
     }
 }

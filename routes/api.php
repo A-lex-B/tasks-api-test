@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\TaskController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
@@ -18,4 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('tasks', [TaskController::class, 'create']);
 Route::put('tasks', [TaskController::class, 'update']);
-Route::get('tasks/{id}', [TaskController::class, 'read']);
+Route::get('tasks/{id}', [TaskController::class, 'read'])->whereNumber('id');
+Route::delete('tasks', [TaskController::class, 'delete']);
+Route::get('tasks', [TaskController::class, 'list']);
