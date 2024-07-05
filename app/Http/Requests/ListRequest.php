@@ -4,6 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Query parameters
+ */
 class ListRequest extends FormRequest
 {
     /**
@@ -18,5 +21,26 @@ class ListRequest extends FormRequest
             'search.status' => 'nullable|boolean',
             'search.complete_till' => 'nullable|integer',
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if ($this->input('search.status') === 'true') {
+            $this->merge([
+                'search' => [
+                    'status' => true,
+                    'complete_till' => $this->input('search.complete_till')
+                ]
+            ]);
+        }
+
+        if ($this->input('search.status') === 'false') {
+            $this->merge([
+                'search' => [
+                    'status' => false,
+                    'complete_till' => $this->input('search.complete_till')
+                ]
+            ]);
+        }
     }
 }
